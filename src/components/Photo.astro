@@ -1,0 +1,12 @@
+---
+// Marco de foto muy redondeado. Sin `src`, muestra el hueco cálido del sistema
+// hasta que haya fotografía real (nunca generada, nunca de producto).
+interface Props { src?: string; alt?: string; class?: string; label?: boolean; settle?: boolean; eager?: boolean }
+const { src, alt = '', class: cls = '', label = true, settle = false, eager = false } = Astro.props;
+---
+<div class:list={['photo', cls, { settle }]}>
+  {src
+    ? <img src={src} alt={alt} loading={eager ? 'eager' : 'lazy'} decoding="async" />
+    : label && <span class="photo-label" aria-hidden="true">Foto real</span>}
+  <slot />
+</div>

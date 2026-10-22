@@ -1,0 +1,21 @@
+---
+// Tarjeta de evidencia: qué se mide, la cifra, la frase (como asociación) y la fuente.
+import type { SerieId } from '../lib/site';
+interface Props { kicker: string; value: string; text: string; source: string; serie?: SerieId; onPhoto?: boolean }
+const { kicker, value, text, source, serie, onPhoto = false } = Astro.props;
+const color = !onPhoto && serie ? `var(--${serie}-text)` : undefined;
+---
+<figure class:list={['dato card', onPhoto ? 'glass' : 'surface']}>
+  <p class="t-card">{kicker}</p>
+  <p class="t-data" style={color ? `color:${color}` : undefined}>{value}</p>
+  <figcaption>
+    <p class="t-lede">{text}</p>
+    <p class="t-source" style={onPhoto ? 'color:var(--ink)' : undefined}>{source}</p>
+  </figcaption>
+</figure>
+
+<style>
+  .dato { margin: 0; text-align: center; display: flex; flex-direction: column; align-items: center; gap: 18px; }
+  .dato .t-data { font-size: clamp(76px, 11vw, 150px); }
+  figcaption { display: flex; flex-direction: column; gap: 14px; max-width: 34ch; }
+</style>

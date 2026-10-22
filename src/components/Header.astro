@@ -1,0 +1,43 @@
+---
+import { SITE, SERIES, SERIE_IDS } from '../lib/site';
+const path = Astro.url.pathname;
+---
+<header class="hd">
+  <div class="wrap hd-in">
+    <a class="brand" href="/" aria-label={`${SITE.name}, inicio`}>{SITE.name}</a>
+    <nav aria-label="Secciones" class="hd-nav">
+      <ul>
+        {SERIE_IDS.map((id) => {
+          const href = `/categoria/${SERIES[id].slug}`;
+          return <li><a href={href} aria-current={path.startsWith(href) ? 'page' : undefined}>{SERIES[id].name}</a></li>;
+        })}
+      </ul>
+    </nav>
+    <div class="hd-act">
+      <a class="t-kicker hd-link" href="/manifiesto" aria-current={path.startsWith('/manifiesto') ? 'page' : undefined}>Método</a>
+      <a class="btn btn-main hd-cta" href="/#newsletter">Suscríbete</a>
+    </div>
+  </div>
+</header>
+
+<style>
+  .hd { position: sticky; top: 0; z-index: 50; background: color-mix(in srgb, var(--ground) 86%, transparent); -webkit-backdrop-filter: blur(18px) saturate(140%); backdrop-filter: blur(18px) saturate(140%); border-bottom: 1px solid var(--line); }
+  .hd-in { display: grid; grid-template-columns: auto 1fr auto; align-items: center; gap: 24px; min-height: 68px; }
+  .brand { font-weight: 500; font-size: 22px; letter-spacing: -0.04em; text-decoration: none; white-space: nowrap; }
+  .hd-nav ul { display: flex; justify-content: center; gap: 4px; list-style: none; margin: 0; padding: 0; }
+  .hd-nav a { display: inline-block; padding: 8px 14px; border-radius: var(--radius-pill); font-size: 15px; font-weight: 500; text-decoration: none; color: var(--ink-muted); transition: color var(--dur-quick) var(--ease-signature), background var(--dur-quick) var(--ease-signature); }
+  .hd-nav a:hover, .hd-nav a[aria-current] { color: var(--ink); background: var(--surface-raised); }
+  .hd-act { display: flex; align-items: center; gap: 18px; }
+  .hd-link { text-decoration: none; color: var(--ink-muted); }
+  .hd-link:hover, .hd-link[aria-current] { color: var(--ink); }
+  .hd-cta { padding: 11px 20px; font-size: 14px; }
+
+  @media (max-width: 980px) {
+    .hd-in { grid-template-columns: 1fr auto; row-gap: 0; }
+    .hd-nav { grid-column: 1 / -1; grid-row: 2; margin-inline: calc(var(--gutter) * -1); overflow-x: auto; scrollbar-width: none; padding: 0 var(--gutter) 10px; }
+    .hd-nav::-webkit-scrollbar { display: none; }
+    .hd-nav ul { justify-content: flex-start; }
+    .hd-nav a { white-space: nowrap; padding: 6px 12px; font-size: 14px; }
+  }
+  @media (max-width: 420px) { .hd-link { display: none; } }
+</style>

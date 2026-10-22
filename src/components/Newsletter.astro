@@ -1,0 +1,38 @@
+---
+// Cierre de la marca: invita a guardar o suscribirse. Si PUBLIC_NEWSLETTER_ACTION no está
+// configurada (URL del formulario de tu proveedor de email), el formulario queda desactivado.
+const action = import.meta.env.PUBLIC_NEWSLETTER_ACTION as string | undefined;
+---
+<section id="newsletter" class="wrap nl-wrap" aria-labelledby="h-nl">
+  <div class="nl">
+    <span class="ghost" aria-hidden="true">Guárdalo</span>
+    <div class="nl-front">
+      <p class="t-kicker muted">La carta del domingo</p>
+      <h2 id="h-nl" class="t-hook-l">Un estudio a la semana. Explicado en cinco minutos.</h2>
+      <p class="t-lede muted">Sin promesas, sin productos milagro. Una idea, su fuente y lo que puedes hacer con ella.</p>
+      <form class="nl-form" method="post" action={action} aria-describedby="nl-note">
+        <label class="visually-hidden" for="nl-email">Tu email</label>
+        <input id="nl-email" name="email" type="email" required autocomplete="email" placeholder="tu@email.com" disabled={!action} />
+        <button class="btn btn-main" type="submit" disabled={!action}>Suscribirme</button>
+      </form>
+      <p id="nl-note" class="t-source">
+        {action ? 'Puedes darte de baja cuando quieras.' : 'Abrimos la lista muy pronto.'}
+      </p>
+    </div>
+  </div>
+</section>
+
+<style>
+  .nl-wrap { margin-top: clamp(72px, 10vw, 140px); }
+  .nl { position: relative; overflow: hidden; text-align: center; padding: clamp(56px, 8vw, 110px) 0; }
+  .nl .ghost { top: 0; }
+  .nl-front { position: relative; z-index: 1; display: flex; flex-direction: column; align-items: center; gap: 22px; }
+  .nl-front .t-hook-l { max-width: 16ch; }
+  .nl-front .t-lede { max-width: 44ch; }
+  .nl-form { display: flex; gap: 10px; width: 100%; max-width: 480px; margin-top: 14px; padding: 6px; border-radius: var(--radius-pill); background: var(--surface); box-shadow: inset 0 0 0 1.5px var(--line); }
+  .nl-form input { flex: 1; min-width: 0; border: 0; background: transparent; color: var(--ink); font: 400 16px var(--font-sans); padding: 0 18px; }
+  .nl-form input::placeholder { color: var(--ink-muted); }
+  .nl-form input:focus { outline: none; }
+  .nl-form:focus-within { box-shadow: inset 0 0 0 3px var(--focus); }
+  .nl-form button[disabled], .nl-form input[disabled] { cursor: not-allowed; opacity: .6; }
+</style>

@@ -1,0 +1,36 @@
+---
+// Mecanismo con varios factores: anillos finos, nodos y etiquetas en mono, siempre sobre foto.
+interface Props { factores: string[]; title?: string; src?: string }
+const { factores, title, src } = Astro.props;
+import Photo from './Photo.astro';
+const cx = 468, cy = 410, R = 250;
+const nodes = factores.slice(0, 6).map((f, i, arr) => {
+  const a = -Math.PI / 2 + (i * 2 * Math.PI) / arr.length;
+  const r = R * (i % 2 ? 0.72 : 0.8);
+  return { f, x: cx + r * Math.cos(a), y: cy + r * Math.sin(a), lx: cx + (R + 70) * Math.cos(a), ly: cy + (R + 60) * Math.sin(a) + 9 };
+});
+const pts = [...nodes, nodes[0]].map((n) => `${n.x.toFixed(0)},${n.y.toFixed(0)}`).join(' ');
+---
+<figure class="hud">
+  <Photo src={src} label={false}>
+    <svg viewBox="0 0 936 820" role="img" aria-label={title ?? `Factores: ${factores.join(', ')}`}>
+      {[250, 190, 130, 70].map((r, i) => <circle class:list={['ring', { f: i > 0 }]} cx={cx} cy={cy} r={r} />)}
+      <polyline class="link" points={pts} />
+      {nodes.map((n) => <circle class="node" cx={n.x} cy={n.y} r="10" />)}
+      {nodes.map((n) => <text class="lab" x={n.lx} y={n.ly} text-anchor="middle">{n.f.toUpperCase()}</text>)}
+    </svg>
+  </Photo>
+  {title && <figcaption class="t-source">{title}</figcaption>}
+</figure>
+
+<style>
+  .hud { margin: 0; }
+  .hud :global(.photo) { aspect-ratio: 936 / 820; }
+  svg { position: absolute; inset: 0; width: 100%; height: 100%; }
+  .ring { fill: none; stroke: var(--hud-line); stroke-width: 2; }
+  .ring.f { opacity: .45; }
+  .link { fill: none; stroke: var(--on-photo); stroke-width: 3; }
+  .node { fill: var(--on-photo); }
+  .lab { fill: var(--on-photo); font-family: var(--font-mono); font-size: 26px; letter-spacing: .08em; opacity: .9; }
+  figcaption { margin-top: 12px; text-align: center; }
+</style>

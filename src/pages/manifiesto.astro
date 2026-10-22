@@ -1,0 +1,72 @@
+---
+import Base from '../layouts/Base.astro';
+import Photo from '../components/Photo.astro';
+
+const reglas = [
+  ['Cada dato lleva su fuente', 'Si no podemos enlazar el estudio, no publicamos la cifra. La fuente va junto al dato, no escondida al final.'],
+  ['Asociación no es promesa', 'Casi todo en longevidad viene de estudios observacionales. Decimos «se asoció con», nunca «te hará vivir más».'],
+  ['Primero lo que vives', 'Empezamos por lo que te pasa, después el porqué, después el dato, y al final lo que puedes hacer hoy.'],
+  ['Sin dosis ni recetas', 'No damos dosis de suplementos ni pautas de tratamiento. Para eso está tu médico, y lo decimos cuando toca.'],
+  ['Productos con lupa', 'En Análisis revisamos tipos de producto contra la evidencia. Si algún día hay enlaces de afiliación, se marcarán y no cambiarán el veredicto.'],
+  ['Corregimos en público', 'Si un estudio nuevo cambia lo que dijimos, actualizamos el artículo y lo indicamos con fecha.'],
+];
+
+const niveles = [
+  ['Sólida', 'Varios ensayos o metaanálisis coinciden.'],
+  ['Moderada', 'Buenos estudios observacionales o pocos ensayos.'],
+  ['Débil', 'Estudios pequeños, cortos o en animales.'],
+  ['Insuficiente', 'Promesa de marketing sin datos detrás.'],
+];
+---
+<Base title="Método editorial" description="Cómo leemos los estudios en Tú Longevidad: fuentes, niveles de evidencia y lo que nunca haremos.">
+  <header class="wrap mh">
+    <p class="t-kicker muted">Método editorial</p>
+    <h1 class="t-hook">Forma, no vende.</h1>
+    <p class="t-lede">Tú Longevidad es una revista para quien ya lo ha probado casi todo y quiere saber qué funciona de verdad. Estas son las reglas con las que escribimos.</p>
+  </header>
+
+  <section class="wrap">
+    <ol class="reglas">
+      {reglas.map(([t, d], i) => (
+        <li>
+          <span class="t-kicker muted">{String(i + 1).padStart(2, '0')}</span>
+          <div><h2 class="t-card">{t}</h2><p class="muted">{d}</p></div>
+        </li>
+      ))}
+    </ol>
+  </section>
+
+  <section class="wrap niv-sec">
+    <Photo class="niv-photo">
+      <div class="glass card niv">
+        <p class="t-kicker">Niveles de evidencia</p>
+        <h2 class="t-title">Cuánto nos fiamos</h2>
+        <ul>
+          {niveles.map(([n, d], i) => (
+            <li>
+              <span class="bars" aria-hidden="true">{[0, 1, 2, 3].map((b) => <i class:list={{ on: b < 4 - i }} />)}</span>
+              <span><strong>{n}.</strong> {d}</span>
+            </li>
+          ))}
+        </ul>
+      </div>
+    </Photo>
+  </section>
+</Base>
+
+<style>
+  .mh { display: flex; flex-direction: column; align-items: center; text-align: center; gap: 22px; padding-block: clamp(64px, 10vw, 140px) clamp(48px, 7vw, 96px); }
+  .mh .t-lede { max-width: 50ch; }
+  .reglas { list-style: none; margin: 0 auto; padding: 0; max-width: 980px; display: grid; grid-template-columns: 1fr 1fr; column-gap: 56px; }
+  .reglas li { display: grid; grid-template-columns: 40px 1fr; gap: 12px; padding: 28px 0; border-top: 2px solid var(--line); }
+  .reglas p { margin: 10px 0 0; font-size: 17px; line-height: 1.55; }
+  .niv-sec { margin-top: clamp(64px, 9vw, 120px); }
+  :global(.niv-photo) { padding: clamp(40px, 8vw, 110px) clamp(16px, 4vw, 48px); display: flex; justify-content: center; }
+  .niv { max-width: 640px; width: 100%; display: flex; flex-direction: column; gap: 16px; }
+  .niv ul { list-style: none; margin: 12px 0 0; padding: 0; display: grid; gap: 16px; }
+  .niv li { display: grid; grid-template-columns: 120px 1fr; gap: 16px; align-items: center; font-size: 17px; line-height: 1.45; }
+  .bars { display: flex; gap: 5px; }
+  .bars i { width: 22px; height: 8px; border-radius: 999px; background: var(--glass-stroke); box-shadow: inset 0 0 0 1px rgba(42, 31, 24, .25); }
+  .bars i.on { background: var(--ink); box-shadow: none; }
+  @media (max-width: 720px) { .reglas { grid-template-columns: 1fr; } .niv li { grid-template-columns: 1fr; gap: 8px; } }
+</style>

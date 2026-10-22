@@ -1,0 +1,44 @@
+---
+import type { Articulo } from '../lib/articles';
+import { readingTime } from '../lib/articles';
+import { formatDate } from '../lib/site';
+import Photo from './Photo.astro';
+import SerieTag from './SerieTag.astro';
+interface Props { articulo: Articulo; size?: 'm' | 'l' }
+const { articulo, size = 'm' } = Astro.props;
+const { data, id } = articulo;
+const href = `/articulos/${id}`;
+---
+<article class:list={['ac', `ac-${size}`]}>
+  <a class="ac-media" href={href} tabindex="-1" aria-hidden="true">
+    <Photo src={data.image} alt={data.imageAlt} label={false}>
+      <span class="ac-badge glass pill tag t-kicker">{data.formato ?? 'Artículo'}</span>
+    </Photo>
+  </a>
+  <div class="ac-body">
+    <div class="ac-meta">
+      <SerieTag serie={data.serie} link />
+      <span class="t-source">{readingTime(articulo)} min · <time datetime={data.pubDate.toISOString()}>{formatDate(data.pubDate)}</time></span>
+    </div>
+    <h3 class:list={[size === 'l' ? 't-title' : 't-card']}>
+      <a href={href}>{data.title}{data.remate && <> <span class="ac-remate">{data.remate}</span></>}</a>
+    </h3>
+    <p class="ac-desc muted">{data.description}</p>
+  </div>
+</article>
+
+<style>
+  .ac { display: flex; flex-direction: column; gap: 18px; }
+  .ac-media { display: block; }
+  .ac-media :global(.photo) { aspect-ratio: 4 / 5; transition: transform var(--dur-standard) var(--ease-signature); }
+  .ac-l .ac-media :global(.photo) { aspect-ratio: 5 / 4; }
+  .ac:hover .ac-media :global(.photo) { transform: scale(.985); }
+  .ac-badge { position: absolute; left: 16px; bottom: 16px; }
+  .ac-body { display: flex; flex-direction: column; gap: 12px; padding-inline: 4px; }
+  .ac-meta { display: flex; flex-wrap: wrap; align-items: center; gap: 10px 14px; }
+  h3 a { text-decoration: none; }
+  h3 a:hover { text-decoration: underline; text-decoration-thickness: 2px; }
+  .ac-remate { color: var(--ink-muted); }
+  .ac-desc { margin: 0; font-size: 16px; line-height: 1.5; display: -webkit-box; -webkit-line-clamp: 3; -webkit-box-orient: vertical; overflow: hidden; }
+  .ac-l .ac-desc { font-size: 18px; }
+</style>

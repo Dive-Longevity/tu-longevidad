@@ -1,0 +1,141 @@
+@import "./tokens.css";
+
+*, *::before, *::after { box-sizing: border-box; }
+html { -webkit-text-size-adjust: 100%; text-size-adjust: 100%; }
+body {
+  margin: 0;
+  background: var(--ground);
+  color: var(--ink);
+  font-family: var(--font-sans);
+  font-size: 18px;
+  line-height: 1.6;
+  letter-spacing: -0.005em;
+  -webkit-font-smoothing: antialiased;
+  text-rendering: optimizeLegibility;
+}
+img, svg, video { display: block; max-width: 100%; }
+a { color: inherit; text-decoration-thickness: 1.5px; text-underline-offset: 3px; }
+:focus-visible { outline: 3px solid var(--focus); outline-offset: 3px; border-radius: 6px; }
+::selection { background: var(--ink); color: var(--ground); }
+
+.wrap { width: 100%; max-width: var(--page); margin-inline: auto; padding-inline: var(--gutter); }
+.skip { position: absolute; left: -999px; top: 8px; z-index: 100; background: var(--action); color: var(--on-action); padding: 10px 18px; border-radius: var(--radius-pill); }
+.skip:focus { left: 16px; }
+.visually-hidden { position: absolute !important; width: 1px; height: 1px; overflow: hidden; clip: rect(0 0 0 0); white-space: nowrap; }
+
+/* ── Tipografía (escala del sistema, adaptada a pantalla) ───────────────── */
+.t-hook   { font-size: clamp(44px, 8.4vw, 120px); line-height: .95; font-weight: 500; letter-spacing: -0.035em; text-transform: uppercase; margin: 0; text-wrap: balance; }
+.t-hook-l { font-size: clamp(34px, 5.6vw, 88px);  line-height: 1;   font-weight: 500; letter-spacing: -0.03em;  text-transform: uppercase; margin: 0; text-wrap: balance; }
+.t-title  { font-size: clamp(26px, 3.4vw, 48px);  line-height: 1.05; font-weight: 500; letter-spacing: -0.025em; text-transform: uppercase; margin: 0; text-wrap: balance; }
+.t-card   { font-size: clamp(20px, 1.9vw, 26px);  line-height: 1.1; font-weight: 500; letter-spacing: -0.02em;  text-transform: uppercase; margin: 0; text-wrap: balance; }
+.t-data   { font-size: clamp(88px, 15vw, 220px);  line-height: .9;  font-weight: 400; letter-spacing: -0.05em; margin: 0; font-variant-numeric: tabular-nums; }
+.t-lede   { font-size: clamp(19px, 1.7vw, 24px);  line-height: 1.45; font-weight: 400; letter-spacing: -0.01em; margin: 0; text-wrap: pretty; }
+.t-body   { font-size: 18px; line-height: 1.6; margin: 0; }
+.t-kicker { font-family: var(--font-mono); font-size: 13px; line-height: 1.2; font-weight: 500; letter-spacing: .08em; text-transform: uppercase; margin: 0; }
+.t-source { font-family: var(--font-mono); font-size: 13px; line-height: 1.45; font-weight: 400; letter-spacing: .02em; color: var(--ink-muted); margin: 0; }
+.muted { color: var(--ink-muted); }
+.center { text-align: center; }
+
+/* ── Foto: marco muy redondeado. Sin imagen, hueco cálido (en producción, foto real). ── */
+.photo {
+  position: relative; overflow: hidden; isolation: isolate;
+  border-radius: var(--radius-frame);
+  color: var(--on-photo);
+  background:
+    radial-gradient(18% 12% at 78% 22%, #f3dcc0 0%, rgba(243, 220, 192, 0) 100%),
+    radial-gradient(26% 20% at 22% 30%, #d9b48e 0%, rgba(217, 180, 142, 0) 100%),
+    radial-gradient(55% 45% at 62% 40%, #b08a6c 0%, rgba(176, 138, 108, 0) 70%),
+    radial-gradient(70% 60% at 30% 85%, #4a3a30 0%, rgba(74, 58, 48, 0) 70%),
+    repeating-linear-gradient(90deg, rgba(255, 240, 220, 0.07) 0 60px, rgba(0, 0, 0, 0) 60px 140px),
+    linear-gradient(165deg, #8a6b55 0%, #3a2c24 60%, #1d1612 100%);
+}
+.photo > img { position: absolute; inset: 0; width: 100%; height: 100%; object-fit: cover; z-index: -2; }
+.photo::after { content: ""; position: absolute; inset: 0; background: var(--scrim); z-index: -1; pointer-events: none; }
+.photo[data-tone="sueno"] { background-color: #2b1f17; }
+.photo-label { position: absolute; right: 20px; top: 18px; font-family: var(--font-mono); font-size: 11px; letter-spacing: .08em; text-transform: uppercase; opacity: .7; }
+
+/* ── Cristal líquido esmerilado ─────────────────────────────────────────── */
+.glass {
+  position: relative; isolation: isolate; overflow: hidden;
+  color: var(--ink);
+  background: linear-gradient(155deg, var(--glass-sheen) 0%, transparent 38%), var(--glass-fill);
+  -webkit-backdrop-filter: blur(var(--blur-glass)) saturate(160%);
+  backdrop-filter: blur(var(--blur-glass)) saturate(160%);
+  border: 1.5px solid var(--glass-stroke);
+  box-shadow: inset 0 1.5px 0 var(--glass-highlight), inset 0 -18px 32px -22px var(--glass-sheen), var(--glass-shadow);
+}
+.glass::before {
+  content: ""; position: absolute; inset: 0; z-index: -1; pointer-events: none; border-radius: inherit;
+  background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='160' height='160'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='.9' numOctaves='2' stitchTiles='stitch'/%3E%3CfeColorMatrix values='0 0 0 0 1 0 0 0 0 1 0 0 0 0 1 0 0 0 .55 0'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23n)'/%3E%3C/svg%3E");
+  opacity: .35; mix-blend-mode: soft-light;
+}
+.glass::after {
+  content: ""; position: absolute; inset: 0; z-index: -1; pointer-events: none; border-radius: inherit;
+  background: radial-gradient(90% 55% at 12% 0%, var(--glass-sheen), transparent 60%);
+}
+
+/* ── Píldoras ───────────────────────────────────────────────────────────── */
+.pill { display: inline-flex; align-items: center; gap: var(--space-1); border-radius: var(--radius-pill); }
+.tag { padding: 8px 16px; white-space: nowrap; }
+@media (max-width: 420px) { .tag.t-kicker { font-size: 11px; padding: 7px 12px; } }
+.tag b { font-weight: 500; padding: 1px 8px; border-radius: 6px; background: var(--glass-stroke); }
+.chip { display: inline-flex; align-items: center; padding: 9px 18px; border-radius: var(--radius-pill); font-size: 15px; font-weight: 500; line-height: 1; text-decoration: none; }
+.chip-opaque { background: var(--surface-raised); color: var(--ink); }
+.btn {
+  display: inline-flex; align-items: center; justify-content: center; gap: 10px;
+  padding: 15px 28px; border-radius: var(--radius-pill); border: 0;
+  font: 500 16px/1 var(--font-sans); letter-spacing: -0.005em; text-decoration: none; cursor: pointer;
+  transition: transform var(--dur-quick) var(--ease-signature), opacity var(--dur-quick) var(--ease-signature);
+}
+.btn:hover { transform: translateY(-1px); }
+.btn-main { background: var(--action); color: var(--on-action); }
+.btn-sec { background: transparent; color: var(--ink); box-shadow: inset 0 0 0 1.5px var(--ink); }
+
+.serie {
+  display: inline-flex; align-items: center; padding: 7px 14px; border-radius: var(--radius-pill);
+  font-family: var(--font-mono); font-size: 12px; font-weight: 500; letter-spacing: .08em; text-transform: uppercase; line-height: 1.2;
+  text-decoration: none;
+}
+.serie[data-serie="sueno"]        { background: var(--sueno);        color: var(--on-sueno); }
+.serie[data-serie="alimentacion"] { background: var(--alimentacion); color: var(--on-alimentacion); }
+.serie[data-serie="movimiento"]   { background: var(--movimiento);   color: var(--on-movimiento); }
+.serie[data-serie="habitos"]      { background: var(--habitos);      color: var(--on-habitos); }
+.serie[data-serie="analisis"]     { background: var(--analisis);     color: var(--on-analisis); }
+
+.card { border-radius: var(--radius-card); padding: clamp(24px, 3.4vw, 48px); }
+.surface { background: var(--surface); }
+.rule { border: 0; border-top: 2px solid var(--line); margin: 0; }
+
+/* ── Texto fantasma: escala editorial ───────────────────────────────────── */
+.ghost {
+  position: absolute; left: 50%; transform: translateX(-50%);
+  font-size: clamp(90px, 20vw, 300px); line-height: .85; font-weight: 500; letter-spacing: -0.045em;
+  text-transform: uppercase; color: var(--ink-ghost); white-space: nowrap; margin: 0;
+  pointer-events: none; user-select: none; z-index: 0;
+}
+
+/* ── Entrada de marca ───────────────────────────────────────────────────── */
+@keyframes rise { from { opacity: 0; transform: translateY(24px); } to { opacity: 1; transform: none; } }
+@keyframes settle { from { transform: scale(1.04); } to { transform: scale(1); } }
+.enter { animation: rise var(--dur-slow) var(--ease-signature) both; }
+.enter-2 { animation-delay: 120ms; }
+.enter-3 { animation-delay: 240ms; }
+.photo.settle > img, .photo.settle::before { animation: settle 8s var(--ease-signature) both; }
+@media (prefers-reduced-motion: reduce) {
+  *, *::before, *::after { animation: none !important; transition: none !important; }
+}
+
+/* ── Prosa de artículo ──────────────────────────────────────────────────── */
+.prose { max-width: var(--measure); font-size: 19px; line-height: 1.7; }
+.prose > * + * { margin-top: 1.1em; }
+.prose h2 { font-size: clamp(24px, 2.6vw, 34px); line-height: 1.08; font-weight: 500; letter-spacing: -0.025em; text-transform: uppercase; margin-top: 2.2em; text-wrap: balance; }
+.prose h3 { font-family: var(--font-mono); font-size: 14px; font-weight: 500; letter-spacing: .08em; text-transform: uppercase; margin-top: 2em; }
+.prose p, .prose li { text-wrap: pretty; }
+.prose ul, .prose ol { padding-left: 1.2em; }
+.prose li + li { margin-top: .4em; }
+.prose strong { font-weight: 600; }
+.prose blockquote { margin-left: 0; padding: 4px 0 4px 24px; border-left: 2px solid var(--line); font-size: 22px; line-height: 1.45; letter-spacing: -0.01em; }
+.prose a { text-decoration-color: var(--line); }
+.prose a:hover { text-decoration-color: currentColor; }
+.prose .block { margin-block: 2.4em; }
+.prose sup a { text-decoration: none; font-family: var(--font-mono); font-size: 12px; }

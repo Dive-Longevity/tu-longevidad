@@ -1,0 +1,195 @@
+---
+import Base from '../layouts/Base.astro';
+import Photo from '../components/Photo.astro';
+import ArticleCard from '../components/ArticleCard.astro';
+import DatoClave from '../components/DatoClave.astro';
+import Protocolo from '../components/Protocolo.astro';
+import MitoODato from '../components/MitoODato.astro';
+import SerieTag from '../components/SerieTag.astro';
+import Newsletter from '../components/Newsletter.astro';
+import { getArticulos } from '../lib/articles';
+import { SERIES, SERIE_IDS, SITE } from '../lib/site';
+
+const articulos = await getArticulos();
+const destacado = articulos.find((a) => a.data.featured) ?? articulos[0];
+const resto = articulos.filter((a) => a !== destacado);
+const lateral = resto.slice(0, 3);
+const recientes = resto.slice(3, 9);
+const countBySerie = Object.fromEntries(SERIE_IDS.map((id) => [id, articulos.filter((a) => a.data.serie === id).length]));
+
+const jsonLd = {
+  '@context': 'https://schema.org',
+  '@type': 'WebSite',
+  name: SITE.name,
+  url: Astro.site?.toString(),
+  inLanguage: 'es',
+  description: SITE.description,
+};
+---
+<Base jsonLd={jsonLd}>
+  <!-- Portada -->
+  <section class="wrap hero-wrap">
+    <Photo class="hero" settle eager>
+      <div class="hero-in">
+        <span class="glass pill tag t-kicker enter">Revista de longevidad · <b>N.º 01</b></span>
+        <h1 class="t-hook enter enter-2">Otros te venden juventud. Aquí tienes el estudio.</h1>
+        <p class="t-lede hero-lede enter enter-3">Sueño, alimentación, movimiento y hábitos, explicados con la evidencia en pantalla. Lo que se sabe, lo que no, y lo que puedes hacer esta semana.</p>
+        <div class="hero-acts enter enter-3">
+          <a class="btn btn-main" href={`/articulos/${destacado.id}`}>Empieza por aquí</a>
+          <a class="glass chip" href="/manifiesto">Cómo leemos los estudios</a>
+        </div>
+      </div>
+    </Photo>
+  </section>
+
+  <!-- Destacado + lateral -->
+  <section class="wrap sec" aria-labelledby="h-destacado">
+    <div class="sec-head">
+      <p class="t-kicker muted">Esta semana</p>
+      <h2 id="h-destacado" class="t-title">Lo último, leído con calma</h2>
+    </div>
+    <div class="feat">
+      <ArticleCard articulo={destacado} size="l" />
+      <ol class="side">
+        {lateral.map((a, i) => (
+          <li>
+            <span class="t-kicker muted">{String(i + 1).padStart(2, '0')}</span>
+            <div>
+              <SerieTag serie={a.data.serie} />
+              <h3 class="t-card"><a href={`/articulos/${a.id}`}>{a.data.title}</a></h3>
+              <p class="muted">{a.data.description}</p>
+            </div>
+          </li>
+        ))}
+      </ol>
+    </div>
+  </section>
+
+  <!-- El estudio en 60 segundos -->
+  <section class="wrap sec" aria-labelledby="h-dato">
+    <Photo class="datos">
+      <div class="datos-head">
+        <span class="serie" data-serie="movimiento">Movimiento</span>
+        <h2 id="h-dato" class="t-hook-l">El estudio en 60 segundos</h2>
+      </div>
+      <div class="datos-grid">
+        <DatoClave onPhoto kicker="Mortalidad" value="−47%" text="con unos 7.000 pasos al día frente a 2.000" source="Ding et al. · Lancet Public Health · 2025" />
+        <DatoClave onPhoto kicker="Demencia" value="−38%" text="de riesgo asociado en el mismo análisis" source="Ding et al. · 57 estudios" />
+      </div>
+      <a class="glass chip datos-link" href="/articulos/7000-pasos">Lee el análisis completo</a>
+    </Photo>
+  </section>
+
+  <!-- Series -->
+  <section class="wrap sec" aria-labelledby="h-series">
+    <div class="sec-head">
+      <p class="t-kicker muted">Las series</p>
+      <h2 id="h-series" class="t-title">Cinco puertas a la misma pregunta</h2>
+    </div>
+    <ul class="series">
+      {SERIE_IDS.map((id) => (
+        <li>
+          <a class="serie-card card surface" href={`/categoria/${SERIES[id].slug}`}>
+            <span class="ghost" aria-hidden="true">{SERIES[id].ghost}</span>
+            <span class="sc-top"><SerieTag serie={id} /><span class="t-source">{countBySerie[id]} {countBySerie[id] === 1 ? 'artículo' : 'artículos'}</span></span>
+            <span class="t-kicker muted">{SERIES[id].kicker}</span>
+            <span class="sc-intro">{SERIES[id].intro}</span>
+          </a>
+        </li>
+      ))}
+    </ul>
+  </section>
+
+  <!-- Esta noche / Mito o dato -->
+  <section class="wrap sec duo" aria-label="Para hoy">
+    <Protocolo
+      title="Prueba esto antes de dormir"
+      steps={[
+        'Dormitorio fresco, oscuro y silencioso.',
+        'Cena dos o tres horas antes de acostarte.',
+        'Diez minutos de luz natural al despertar.',
+        'La misma hora, también el fin de semana.',
+      ]}
+    />
+    <MitoODato
+      mito="Con la edad se necesita dormir menos"
+      dato="La recomendación para adultos sigue siendo de 7 o más horas. Lo que cambia es la arquitectura: el sueño profundo se acorta y aparecen más despertares."
+      fuente="AASM · Sleep Research Society · 2015"
+    />
+  </section>
+
+  <!-- Recientes -->
+  {recientes.length > 0 && (
+    <section class="wrap sec" aria-labelledby="h-recientes">
+      <div class="sec-head row">
+        <div>
+          <p class="t-kicker muted">Archivo</p>
+          <h2 id="h-recientes" class="t-title">Más para leer</h2>
+        </div>
+        <a class="btn btn-sec" href="/articulos">Todos los artículos</a>
+      </div>
+      <div class="grid">{recientes.map((a) => <ArticleCard articulo={a} />)}</div>
+    </section>
+  )}
+
+  <Newsletter />
+</Base>
+
+<style>
+  .hero-wrap { padding-top: var(--space-3); }
+  :global(.hero) { min-height: min(84vh, 820px); display: flex; align-items: center; justify-content: center; }
+  .hero-in { display: flex; flex-direction: column; align-items: center; text-align: center; gap: 26px; padding: clamp(56px, 9vw, 120px) clamp(16px, 4vw, 48px); max-width: 1100px; }
+  .hero-lede { max-width: 46ch; }
+  .hero-acts { display: flex; flex-wrap: wrap; justify-content: center; gap: 12px; margin-top: 8px; }
+  .hero-acts .glass.chip { padding: 15px 24px; font-size: 16px; }
+  :global(.hero) .btn-main { background: var(--on-photo); color: #2a1f18; }
+
+  .sec { margin-top: clamp(72px, 10vw, 140px); }
+  .sec-head { display: flex; flex-direction: column; gap: 12px; margin-bottom: clamp(28px, 4vw, 48px); }
+  .sec-head.row { flex-direction: row; justify-content: space-between; align-items: flex-end; flex-wrap: wrap; gap: 20px; }
+  .sec-head.row > div { display: flex; flex-direction: column; gap: 12px; }
+
+  .feat { display: grid; grid-template-columns: 1.35fr 1fr; gap: clamp(28px, 4vw, 64px); align-items: start; }
+  .side { list-style: none; margin: 0; padding: 0; }
+  .side li { display: grid; grid-template-columns: 34px 1fr; gap: 12px; padding: 26px 0; border-top: 2px solid var(--line); }
+  .side li:first-child { border-top: 0; padding-top: 0; }
+  .side li > div { display: flex; flex-direction: column; align-items: flex-start; gap: 12px; }
+  .side h3 a { text-decoration: none; }
+  .side h3 a:hover { text-decoration: underline; }
+  .side p { margin: 0; font-size: 16px; line-height: 1.5; }
+
+  :global(.datos) { padding: clamp(40px, 7vw, 96px) clamp(16px, 4vw, 64px); display: flex; flex-direction: column; align-items: center; gap: clamp(28px, 4vw, 48px); }
+  .datos-head { display: flex; flex-direction: column; align-items: center; gap: 20px; text-align: center; }
+  .datos-grid { display: grid; grid-template-columns: repeat(2, minmax(0, 420px)); gap: 20px; justify-content: center; width: 100%; }
+
+  .series { list-style: none; margin: 0; padding: 0; display: grid; grid-template-columns: repeat(6, 1fr); gap: 16px; }
+  .series li { grid-column: span 2; }
+  .series li:nth-child(4), .series li:nth-child(5) { grid-column: span 3; }
+  .serie-card { position: relative; overflow: hidden; isolation: isolate; display: flex; flex-direction: column; gap: 16px; min-height: 280px; text-decoration: none; transition: transform var(--dur-standard) var(--ease-signature); }
+  .serie-card:hover { transform: translateY(-3px); }
+  .serie-card .ghost { top: auto; bottom: -0.12em; font-size: clamp(80px, 9vw, 150px); }
+  .serie-card > *:not(.ghost) { position: relative; z-index: 1; }
+  .sc-top .t-source { white-space: nowrap; }
+  .sc-top { display: flex; justify-content: space-between; align-items: center; gap: 12px; }
+  .sc-intro { font-size: 17px; line-height: 1.5; max-width: 40ch; }
+
+  .duo { display: grid; grid-template-columns: 1fr 1fr; gap: 20px; align-items: start; }
+
+  .grid { display: grid; grid-template-columns: repeat(3, 1fr); gap: clamp(28px, 3vw, 44px) clamp(20px, 2.4vw, 32px); }
+
+  @media (max-width: 1100px) {
+    .series li, .series li:nth-child(4), .series li:nth-child(5) { grid-column: span 3; }
+    .series li:nth-child(5) { grid-column: 1 / -1; }
+  }
+  @media (max-width: 980px) {
+    .feat, .duo { grid-template-columns: 1fr; }
+    .grid { grid-template-columns: repeat(2, 1fr); }
+  }
+  @media (max-width: 640px) {
+    .grid { grid-template-columns: 1fr; }
+    .datos-grid { grid-template-columns: 1fr; }
+    .series li, .series li:nth-child(4), .series li:nth-child(5) { grid-column: 1 / -1; }
+    .serie-card { min-height: 0; padding-bottom: 96px; }
+    .serie-card .ghost { font-size: 84px; }
+  }
+</style>

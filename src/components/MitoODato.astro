@@ -1,0 +1,17 @@
+---
+// Mito en espresso, dato en crema con su fuente. La diferencia es de luz, no de color.
+interface Props { mito: string; dato: string; fuente: string }
+const { mito, dato, fuente } = Astro.props;
+---
+<div class="mod">
+  <div class="card mito"><p class="t-kicker">Mito</p><p class="t-title">«{mito}»</p></div>
+  <div class="card dato"><p class="t-kicker muted">Dato</p><p class="t-lede">{dato}</p><p class="t-source">{fuente}</p></div>
+</div>
+
+<style>
+  .mod { display: grid; gap: 14px; }
+  .mito { background: var(--action); color: var(--on-action); }
+  .mito .t-kicker { opacity: .72; }
+  .mito .t-title { margin-top: 18px; font-size: clamp(22px, 2.6vw, 34px); }
+  .dato { background: var(--surface); border: 1.5px solid var(--line); display: flex; flex-direction: column; gap: 16px; }
+</style>

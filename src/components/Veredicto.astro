@@ -1,0 +1,38 @@
+---
+// Ficha de la serie Análisis: qué dice la evidencia sobre un tipo de producto.
+// Nivel: 'solida' | 'moderada' | 'debil' | 'insuficiente'
+interface Props { producto: string; nivel: 'solida' | 'moderada' | 'debil' | 'insuficiente'; si: string[]; no: string[]; fuente: string }
+const { producto, nivel, si, no, fuente } = Astro.props;
+const niveles = { solida: 'Sólida', moderada: 'Moderada', debil: 'Débil', insuficiente: 'Insuficiente' };
+const order = ['insuficiente', 'debil', 'moderada', 'solida'];
+const lvl = order.indexOf(nivel) + 1;
+---
+<section class="ver card surface" aria-label={`Veredicto: ${producto}`}>
+  <div class="head">
+    <div>
+      <p class="t-kicker muted">Veredicto de evidencia</p>
+      <h3 class="t-title">{producto}</h3>
+    </div>
+    <div class="meter" role="img" aria-label={`Evidencia ${niveles[nivel]}, ${lvl} de 4`}>
+      {order.map((_, i) => <i class:list={{ on: i < lvl }} />)}
+      <span class="t-kicker">{niveles[nivel]}</span>
+    </div>
+  </div>
+  <div class="cols">
+    <div><p class="t-kicker">Lo que sí</p><ul>{si.map((x) => <li>{x}</li>)}</ul></div>
+    <div><p class="t-kicker">Lo que no</p><ul>{no.map((x) => <li>{x}</li>)}</ul></div>
+  </div>
+  <p class="t-source">{fuente}</p>
+</section>
+
+<style>
+  .ver { display: flex; flex-direction: column; gap: 28px; }
+  .head { display: flex; flex-wrap: wrap; justify-content: space-between; gap: 20px; align-items: flex-end; }
+  .head .t-title { margin-top: 12px; font-size: clamp(24px, 3vw, 38px); }
+  .meter { display: flex; align-items: center; gap: 6px; }
+  .meter i { width: 26px; height: 8px; border-radius: 999px; background: var(--line); }
+  .meter i.on { background: var(--ink); }
+  .meter .t-kicker { margin-left: 8px; }
+  .cols { display: grid; grid-template-columns: repeat(auto-fit, minmax(220px, 1fr)); gap: 24px; border-top: 2px solid var(--line); padding-top: 24px; }
+  ul { margin: 12px 0 0 !important; padding-left: 1.1em; font-size: 17px; line-height: 1.5; }
+</style>

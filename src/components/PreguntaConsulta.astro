@@ -1,0 +1,18 @@
+---
+// La duda real de una lectora, en mayúsculas, sobre foto. La respuesta va fuera de la tarjeta.
+interface Props { pregunta: string; kicker?: string; src?: string }
+const { pregunta, kicker = 'Nos preguntáis', src } = Astro.props;
+import Photo from './Photo.astro';
+---
+<Photo src={src} class="pc" label={false}>
+  <div class="glass card pc-q">
+    <p class="t-kicker">{kicker}</p>
+    <p class="t-hook-l">«{pregunta}»</p>
+  </div>
+</Photo>
+
+<style>
+  :global(.pc) { padding: clamp(28px, 6vw, 72px) clamp(16px, 4vw, 48px); display: flex; justify-content: center; }
+  .pc-q { max-width: 820px; text-align: center; display: flex; flex-direction: column; gap: 20px; }
+  .pc-q .t-hook-l { font-size: clamp(26px, 4vw, 52px); }
+</style>

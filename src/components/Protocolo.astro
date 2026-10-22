@@ -1,0 +1,22 @@
+---
+// Pasos que se pueden hacer hoy. 3–4 pasos, 10 palabras máximo. Sin dosis ni productos.
+interface Props { title: string; kicker?: string; steps: string[] }
+const { title, kicker = 'Esta noche', steps } = Astro.props;
+---
+<section class="proto card surface" aria-label={title}>
+  <p class="t-kicker muted">{kicker}</p>
+  <h3 class="t-title">{title}</h3>
+  <ol>
+    {steps.map((s, i) => (
+      <li><span class="t-kicker muted n">{String(i + 1).padStart(2, '0')}</span><p>{s}</p></li>
+    ))}
+  </ol>
+</section>
+
+<style>
+  .proto .t-title { margin-top: 14px; font-size: clamp(24px, 3vw, 40px); }
+  ol { list-style: none; margin: 28px 0 0; padding: 0; }
+  li { display: flex; gap: 24px; align-items: baseline; padding: 18px 0; border-top: 2px solid var(--line); margin: 0 !important; }
+  .n { width: 28px; flex: none; }
+  li p { margin: 0; font-size: clamp(18px, 1.8vw, 22px); line-height: 1.4; }
+</style>

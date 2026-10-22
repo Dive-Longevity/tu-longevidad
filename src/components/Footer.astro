@@ -1,0 +1,43 @@
+---
+import { SITE, SERIES, SERIE_IDS, DISCLAIMER } from '../lib/site';
+const year = new Date().getFullYear();
+---
+<footer class="ft">
+  <div class="wrap">
+    <div class="ft-top">
+      <div class="ft-brand">
+        <p class="brand">{SITE.name}</p>
+        <p class="muted">Longevidad explicada con estudios, no con promesas. Cada dato lleva su fuente.</p>
+      </div>
+      <nav aria-label="Secciones del pie">
+        <p class="t-kicker muted">Series</p>
+        <ul>{SERIE_IDS.map((id) => <li><a href={`/categoria/${SERIES[id].slug}`}>{SERIES[id].name}</a></li>)}</ul>
+      </nav>
+      <nav aria-label="La revista">
+        <p class="t-kicker muted">La revista</p>
+        <ul>
+          <li><a href="/articulos">Todos los artículos</a></li>
+          <li><a href="/manifiesto">Método editorial</a></li>
+          <li><a href="/rss.xml">RSS</a></li>
+        </ul>
+      </nav>
+    </div>
+    <hr class="rule" />
+    <div class="ft-bottom">
+      <p class="t-source">{DISCLAIMER} Si necesitas tratamiento, háblalo con tu médico.</p>
+      <p class="t-source">© {year} {SITE.name}</p>
+    </div>
+  </div>
+</footer>
+
+<style>
+  .ft { margin-top: clamp(64px, 10vw, 140px); padding-block: 56px 40px; background: var(--surface); }
+  .ft-top { display: grid; grid-template-columns: 2fr 1fr 1fr; gap: 40px; padding-bottom: 40px; }
+  .brand { font-weight: 500; font-size: 28px; letter-spacing: -0.04em; margin: 0 0 10px; }
+  .ft-brand p.muted { max-width: 38ch; margin: 0; font-size: 16px; }
+  ul { list-style: none; margin: 14px 0 0; padding: 0; display: grid; gap: 8px; font-size: 16px; }
+  ul a { text-decoration: none; }
+  ul a:hover { text-decoration: underline; }
+  .ft-bottom { display: flex; flex-wrap: wrap; justify-content: space-between; gap: 12px; padding-top: 24px; }
+  @media (max-width: 720px) { .ft-top { grid-template-columns: 1fr 1fr; } .ft-brand { grid-column: 1 / -1; } }
+</style>

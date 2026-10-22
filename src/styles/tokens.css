@@ -1,0 +1,114 @@
+/* Tú Longevidad — tokens. Salen del sistema «Consulta Abierta» (tokens.json v3).
+   Las series nuevas (alimentación, hábitos, análisis) siguen la misma regla: solo marrones, beiges y blancos cálidos. */
+
+:root {
+  color-scheme: light;
+
+  /* Superficies y texto · tema Claro */
+  --ground: #efe7dc;
+  --surface: #f8f3ec;
+  --surface-raised: #e4d8c8;
+  --line: #d6c6b2;
+  --ink: #2a1f18;
+  --ink-muted: #6b5747;
+  --ink-ghost: #e2d5c4;
+  --action: #2a1f18;
+  --on-action: #f8f3ec;
+  --on-photo: #fbf6ef;
+  --scrim: rgba(27, 20, 16, 0.35);
+  --focus: #2a1f18;
+
+  /* Series: relleno de etiqueta + texto encima + versión texto */
+  --sueno: #4a3426;            --on-sueno: #fbf6ef;        --sueno-text: #4a3426;
+  --alimentacion: #a8552f;     --on-alimentacion: #fbf6ef; --alimentacion-text: #9a4a26;
+  --movimiento: #c9a57a;       --on-movimiento: #2a1f18;   --movimiento-text: #7a5a36;
+  --habitos: #765a46;          --on-habitos: #fbf6ef;      --habitos-text: #6a4f3c;
+  --analisis: #2a1f18;         --on-analisis: #f8f3ec;     --analisis-text: #2a1f18;
+
+  /* Cristal líquido esmerilado */
+  --glass-fill: rgba(250, 243, 234, 0.5);
+  --glass-sheen: rgba(255, 255, 255, 0.55);
+  --glass-stroke: rgba(255, 249, 240, 0.65);
+  --glass-highlight: rgba(255, 255, 255, 0.95);
+  --glass-shadow: 0 28px 60px -24px rgba(42, 31, 24, 0.38);
+  --blur-glass: 40px;
+  --hud-line: rgba(251, 246, 239, 0.75);
+
+  /* Tipografía */
+  --font-sans: "Albert Sans", "Helvetica Neue", Arial, sans-serif;
+  --font-mono: "DM Mono", "SFMono-Regular", Menlo, monospace;
+
+  /* Espaciado */
+  --space-1: 8px;
+  --space-2: 16px;
+  --space-3: 24px;
+  --space-4: 32px;
+  --space-6: 48px;
+  --space-8: 64px;
+  --gutter: clamp(16px, 5vw, 72px);
+  --measure: 68ch;
+  --page: 1280px;
+
+  /* Radios */
+  --radius-frame: clamp(24px, 3vw, 40px);
+  --radius-card: clamp(28px, 3.2vw, 44px);
+  --radius-inner: 24px;
+  --radius-pill: 999px;
+
+  /* Movimiento */
+  --dur-quick: 300ms;
+  --dur-standard: 600ms;
+  --dur-slow: 750ms;
+  --ease-signature: cubic-bezier(0, 0, 0.3, 1);
+  --ease-exit: cubic-bezier(0.4, 0, 1, 1);
+}
+
+/* Tema Oscuro: cacao muy oscuro */
+@media (prefers-color-scheme: dark) {
+  :root:not([data-theme="light"]) {
+    color-scheme: dark;
+    --ground: #1b1410;
+    --surface: #251c16;
+    --surface-raised: #32271f;
+    --line: #45372c;
+    --ink: #f3ebe0;
+    --ink-muted: #bba996;
+    --ink-ghost: #2e241d;
+    --action: #f3ebe0;
+    --on-action: #1b1410;
+    --focus: #f3ebe0;
+    --sueno-text: #d2b394;
+    --alimentacion-text: #e0936a;
+    --movimiento-text: #d9bb92;
+    --habitos-text: #cfae95;
+    --analisis: #f3ebe0; --on-analisis: #1b1410; --analisis-text: #f3ebe0;
+    --glass-fill: rgba(38, 27, 20, 0.42);
+    --glass-sheen: rgba(255, 238, 220, 0.16);
+    --glass-stroke: rgba(255, 238, 220, 0.2);
+    --glass-highlight: rgba(255, 238, 220, 0.3);
+    --glass-shadow: 0 28px 60px -20px rgba(0, 0, 0, 0.6);
+  }
+}
+:root[data-theme="dark"] {
+  color-scheme: dark;
+  --ground: #1b1410;
+  --surface: #251c16;
+  --surface-raised: #32271f;
+  --line: #45372c;
+  --ink: #f3ebe0;
+  --ink-muted: #bba996;
+  --ink-ghost: #2e241d;
+  --action: #f3ebe0;
+  --on-action: #1b1410;
+  --focus: #f3ebe0;
+  --sueno-text: #d2b394;
+  --alimentacion-text: #e0936a;
+  --movimiento-text: #d9bb92;
+  --habitos-text: #cfae95;
+  --analisis: #f3ebe0; --on-analisis: #1b1410; --analisis-text: #f3ebe0;
+  --glass-fill: rgba(38, 27, 20, 0.42);
+  --glass-sheen: rgba(255, 238, 220, 0.16);
+  --glass-stroke: rgba(255, 238, 220, 0.2);
+  --glass-highlight: rgba(255, 238, 220, 0.3);
+  --glass-shadow: 0 28px 60px -20px rgba(0, 0, 0, 0.6);
+}

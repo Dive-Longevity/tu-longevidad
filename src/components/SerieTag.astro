@@ -1,0 +1,9 @@
+---
+import { SERIES, type SerieId } from '../lib/site';
+interface Props { serie: SerieId; link?: boolean }
+const { serie, link = false } = Astro.props;
+const s = SERIES[serie];
+---
+{link
+  ? <a class="serie" data-serie={serie} href={`/categoria/${s.slug}`}>{s.name}</a>
+  : <span class="serie" data-serie={serie}>{s.name}</span>}
